@@ -68,8 +68,15 @@ def write_feature_importance(model_name: str, top_n: int = 20) -> Path:
         std = result.importances_std
         method = "permutation"
 
+    if len(importance) != len(data.feature_names):
+        raise ValueError(
+            f"Feature count mismatch for {model_name}: "
+            f"model has {len(importance)} features, prepared data has {len(data.feature_names)} features. "
+            "Retrain the model after running scripts/prepare_data.py."
+        )
+
     ranked = sorted(
-        zip(data.feature_names, importance, std, strict=False),
+        zip(data.feature_names, importance, std, strict=True),
         key=lambda item: item[1],
         reverse=True,
     )[:top_n]
@@ -91,10 +98,38 @@ def write_feature_importance(model_name: str, top_n: int = 20) -> Path:
     return output_path
 
 
+def model_feature_count(model_name: str) -> int | None:
+    model_path = MODELS_DIR / f"{model_name}.joblib"
+    if not model_path.exists():
+        return None
+
+    model = joblib.load(model_path)
+    if hasattr(model, "feature_importances_"):
+        return len(model.feature_importances_)
+    if hasattr(model, "n_features_in_"):
+        return int(model.n_features_in_)
+    return None
+
+
+def choose_importance_model(feature_count: int) -> str:
+    for model_name in ("random_forest_tuned", "random_forest"):
+        count = model_feature_count(model_name)
+        if count == feature_count:
+            return model_name
+
+    raise ValueError(
+        "No compatible Random Forest model found for the prepared data. "
+        "Run scripts/train_ml.py or scripts/tune_ml.py after scripts/prepare_data.py."
+    )
+
+
 def main() -> None:
     data = load_prepared_data()
     matrix_path = write_confusion_matrices(data.class_names)
-    importance_model = "random_forest_tuned" if (MODELS_DIR / "random_forest_tuned.joblib").exists() else "random_forest"
+    if not data.feature_names:
+        raise ValueError("Feature names not available. Prepare data without PCA first.")
+
+    importance_model = choose_importance_model(len(data.feature_names))
     importance_path = write_feature_importance(importance_model)
     print(f"saved: {matrix_path}")
     print(f"saved: {importance_path}")
@@ -102,4 +137,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

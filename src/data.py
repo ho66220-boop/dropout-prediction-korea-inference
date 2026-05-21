@@ -17,6 +17,25 @@ from src.config import DATA_PROCESSED_DIR, DATA_RAW_DIR, RANDOM_STATE, TEST_SIZE
 
 
 TARGET_CANDIDATES = ("Target", "target", "Status", "status", "Class", "class")
+CATEGORICAL_CODE_FEATURES = {
+    "Marital status",
+    "Application mode",
+    "Course",
+    "Daytime/evening attendance",
+    "Previous qualification",
+    "Nacionality",
+    "Mother's qualification",
+    "Father's qualification",
+    "Mother's occupation",
+    "Father's occupation",
+    "Displaced",
+    "Educational special needs",
+    "Debtor",
+    "Tuition fees up to date",
+    "Gender",
+    "Scholarship holder",
+    "International",
+}
 
 
 @dataclass(frozen=True)
@@ -60,9 +79,19 @@ def infer_target_column(df: pd.DataFrame, target: str | None = None) -> str:
     )
 
 
+def clean_column_names(df: pd.DataFrame) -> pd.DataFrame:
+    df = df.copy()
+    df.columns = [str(column).replace("\ufeff", "").strip() for column in df.columns]
+    return df
+
+
 def build_preprocessor(df: pd.DataFrame, use_pca: bool = False, pca_components: float | int = 0.95) -> Pipeline:
-    numeric_features = df.select_dtypes(include=["number", "bool"]).columns.tolist()
-    categorical_features = [col for col in df.columns if col not in numeric_features]
+    categorical_features = [
+        column
+        for column in df.columns
+        if column in CATEGORICAL_CODE_FEATURES or not pd.api.types.is_numeric_dtype(df[column])
+    ]
+    numeric_features = [column for column in df.columns if column not in categorical_features]
 
     transformer = ColumnTransformer(
         transformers=[
@@ -86,6 +115,7 @@ def prepare_dataset(
 ) -> PreparedData:
     csv_path = find_csv(input_path)
     df = pd.read_csv(csv_path, sep=None, engine="python")
+    df = clean_column_names(df)
     target_col = infer_target_column(df, target)
 
     df = df.drop_duplicates().copy()
@@ -136,6 +166,8 @@ def prepare_dataset(
             "feature_names": feature_names,
             "source_csv": str(csv_path),
             "target_column": target_col,
+            "categorical_features": preprocessor.named_steps["transformer"].transformers_[1][2],
+            "numeric_features": preprocessor.named_steps["transformer"].transformers_[0][2],
         },
         DATA_PROCESSED_DIR / "prepared_data.joblib",
     )

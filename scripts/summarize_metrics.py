@@ -12,8 +12,12 @@ from src.config import METRICS_DIR
 
 def main() -> None:
     rows = []
+    required_keys = {"accuracy", "macro_precision", "macro_recall", "macro_f1", "weighted_f1"}
     for path in sorted(METRICS_DIR.glob("*.json")):
         metrics = json.loads(path.read_text(encoding="utf-8"))
+        if not required_keys.issubset(metrics):
+            continue
+
         rows.append(
             {
                 "model": path.stem,
@@ -44,4 +48,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
