@@ -52,6 +52,27 @@ data/raw/student_dropout_success/data.csv
 - **한국 유추 관점:** 데이터가 가리키는 이탈 신호는 "학업·재정 누적 실패"에 가깝습니다. 반면 한국 고1의 전략적 자퇴는 오히려 성적이 나쁘지 않은 학생이 더 나은 입시 전략을 위해 선택하는 경우가 많습니다. 즉 동일한 "이탈"이라도 한국형 자퇴는 데이터가 학습한 실패형 이탈과 동기가 반대일 수 있으며, 이 간극 자체가 중요한 발견입니다.
 - 단, 변수 중요도는 인과관계를 의미하지 않으며, 실제 조기경보 모델로 활용하려면 입학 정보 또는 1학기 정보만 사용하는 별도 실험이 필요합니다.
 
+## Visualizations
+
+`reports/figures/`에 생성되는 주요 시각화 자료입니다. (생성 방법은 [How to Run](#how-to-run) 참고)
+
+| 그림 | 설명 |
+| --- | --- |
+| `class_distribution.png` | target 클래스 분포 (class imbalance 확인) |
+| `key_feature_distributions.png` | 클래스별 핵심 변수 분포 (boxplot) |
+| `model_performance.png` | macro F1 기준 모델 성능 비교 |
+| `experiment_comparison.png` | PCA/SMOTE ablation 비교 |
+| `feature_importance.png` | Random Forest 변수 중요도 |
+| `best_confusion_matrix.png` | 최고 모델 confusion matrix |
+| `correlation_heatmap.png` | 핵심 수치형 변수 간 상관관계 |
+| `pca_projection.png` | 2D PCA projection에서의 클래스 분포 및 중첩 |
+| `per_class_metrics.png` | 최고 모델의 클래스별 precision/recall/F1 (Enrolled가 가장 어려움) |
+| `dropout_signal_by_class.png` | 클래스별 핵심 변수 평균 — **Dropout의 실패형 이탈 신호와 한국형 전략적 자퇴의 대비** |
+
+이 프로젝트의 핵심 그림은 `dropout_signal_by_class.png`입니다. 데이터의 Dropout 집단은 학업·재정 지표가 전반적으로 가장 낮은 "실패형 이탈" 패턴을 보이며, 이는 성적이 양호한 학생의 자발적 선택인 한국형 전략적 자퇴와 동기 구조가 다를 수 있음을 시각적으로 드러냅니다.
+
+![Failure-driven dropout signal by class](reports/figures/dropout_signal_by_class.png)
+
 ## 유추의 범위와 한계
 
 이 프로젝트가 한국 고1 자퇴를 직접 예측하지 않는다는 점을 분명히 합니다. 해외 데이터에서 얻은 결과를 한국에 연결할 때의 전제와 경계는 다음과 같습니다.
@@ -159,6 +180,12 @@ python scripts/generate_final_assets.py
 python scripts/generate_guideline_assets.py
 ```
 
+9. 추가 시각화 자료(상관관계 히트맵, PCA projection, 클래스별 지표, 실패형 이탈 신호)를 생성합니다.
+
+```powershell
+python scripts/generate_extra_figures.py
+```
+
 ## Repository Structure
 
 - `src/data.py`: 데이터 로드, 컬럼명 정리, target 추론, 전처리, split 저장
@@ -171,6 +198,7 @@ python scripts/generate_guideline_assets.py
 - `scripts/analyze_results.py`: confusion matrix 및 feature importance 생성
 - `scripts/generate_final_assets.py`: 일반 최종 보고서/슬라이드 생성
 - `scripts/generate_guideline_assets.py`: 보고서/appendix 생성
+- `scripts/generate_extra_figures.py`: 추가 시각화(상관관계 히트맵, PCA projection, 클래스별 지표, 실패형 이탈 신호) 생성
 - `reports/metrics/summary.csv`: 전체 모델 성능 요약
 - `reports/metrics/random_forest_tuned_feature_importance.csv`: 변수 중요도
 - `reports/final_report.md`: 최종 보고서

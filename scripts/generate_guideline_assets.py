@@ -412,6 +412,11 @@ def main() -> None:
         FIGURES_DIR / "experiment_comparison.png",
         FIGURES_DIR / "feature_importance.png",
         FIGURES_DIR / "best_confusion_matrix.png",
+        # scripts/generate_extra_figures.py로 생성되는 추가 시각화
+        FIGURES_DIR / "correlation_heatmap.png",
+        FIGURES_DIR / "pca_projection.png",
+        FIGURES_DIR / "per_class_metrics.png",
+        FIGURES_DIR / "dropout_signal_by_class.png",
     ]
     unsupervised_metrics = run_unsupervised_analysis()
     appendix_path = build_activity_appendix()
