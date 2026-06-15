@@ -174,14 +174,14 @@ def build_report(summary: pd.DataFrame, best_model: str, figure_paths: list[Path
 
 ## Project Information
 
-- Team: Team 11
-- Title: A Comparative Study of Machine Learning and Deep Learning for Predicting Student Success and Dropout
-- Dataset: Predict Students' Dropout and Academic Success
+- Type: Solo individual project
+- Title: Predicting Student Dropout from Overseas Education Data, and Inferring South Korea's Surge in 10th-Grade Voluntary Withdrawal
+- Dataset: Predict Students' Dropout and Academic Success (Portuguese higher education)
 - Task: Multi-class classification of `Dropout`, `Enrolled`, and `Graduate`
 
 ## 1. Objective
 
-This project predicts student dropout and academic success using higher-education tabular data. The main goal is not only to maximize predictive performance, but also to compare classical machine learning models and a neural network model, then interpret which student-related factors are most associated with the prediction.
+This project predicts student dropout and academic success using higher-education tabular data. The main goal is not only to maximize predictive performance, but also to compare classical machine learning models and a neural network model, then interpret which student-related factors are most associated with the prediction. As a social framing, the interpretation is connected to South Korea's recent surge in 10th-grade voluntary withdrawal (which exceeded 10,000 students for the first time). Since Korean data is hard to obtain directly, insights from this overseas (Portuguese higher-education) dataset are cautiously extrapolated to the Korean context — treated as analogical interpretation, not prediction. A key nuance is that many Korean withdrawals are "strategic" (leaving to focus on the national college entrance exam), whose motivation may differ from the failure-driven dropout this dataset captures.
 
 ## 2. Data and Preprocessing
 
@@ -274,7 +274,7 @@ def build_html_report(summary: pd.DataFrame, best_model: str) -> Path:
 </head>
 <body>
   <h1>A Comparative Study of ML and DL for Predicting Student Success and Dropout</h1>
-  <p><strong>Team 11</strong> | Final Project Report</p>
+  <p><strong>Solo Individual Project</strong> | Final Project Report</p>
 
   <h2>Objective</h2>
   <p>This project predicts whether students are likely to drop out, remain enrolled, or graduate. The study compares classical machine learning models with a neural network model and interprets the key features behind the predictions.</p>
@@ -378,8 +378,8 @@ A Comparative Study of ML and DL for Predicting Student Success and Dropout
 def build_slide_deck(summary: pd.DataFrame, best_model: str) -> Path:
     best = summary.sort_values("macro_f1", ascending=False).iloc[0]
     slides = [
-        ("A Comparative Study of ML and DL for Predicting Student Success and Dropout", ["Team 11", "Final Project Presentation"]),
-        ("Problem and Goal", ["Predict Dropout, Enrolled, and Graduate", "Support early intervention for students at risk"]),
+        ("Predicting Dropout from Overseas Data to Read Korea's 10th-Grade Withdrawal Surge", ["Solo Individual Project", "Final Project Presentation"]),
+        ("Problem and Goal", ["Predict Dropout, Enrolled, and Graduate", "Read Korea's 10th-grade withdrawal surge by analogy", "Support early intervention for students at risk"]),
         ("Dataset", ["4,424 student records", "Tabular higher-education data", "Three target classes"]),
         ("Preprocessing", ["Stratified train/test split", "Standardization and one-hot encoding", "PCA and SMOTE experiments"]),
         ("Models", ["Logistic Regression", "SVM with RBF kernel", "Random Forest", "MLP with SGD/backpropagation"]),
@@ -387,7 +387,8 @@ def build_slide_deck(summary: pd.DataFrame, best_model: str) -> Path:
         ("PCA and SMOTE", ["SMOTE slightly improved Random Forest", "PCA generally reduced performance", '<img src="figures/experiment_comparison.png" alt="experiments">']),
         ("Feature Importance", ["Semester approved units and grades were strongest", "Tuition payment status was also important", '<img src="figures/feature_importance.png" alt="importance">']),
         ("Error Analysis", ["The Enrolled class was hardest to classify", "It is an intermediate academic state", '<img src="figures/best_confusion_matrix.png" alt="confusion matrix">']),
-        ("Conclusion", ["Random Forest performed best for this dataset", "MLP was competitive but not superior", "Best practical use: decision-support early-warning system"]),
+        ("Korea Analogy", ["Data signals failure-driven dropout (low grades, unpaid tuition)", "Korean 10th-grade withdrawal is often strategic (exam-focused)", "Motivations may be opposite — applied as hypothesis, not policy"]),
+        ("Conclusion", ["Random Forest performed best for this dataset", "MLP was competitive but not superior", "Best practical use: decision-support early-warning system", "Korea insights are analogical only, not direct prediction"]),
     ]
     sections = []
     for title, bullets in slides:

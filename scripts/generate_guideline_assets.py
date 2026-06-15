@@ -138,12 +138,12 @@ def build_activity_appendix() -> Path:
 
 ## 프로포절의 기존 활동 계획
 
-| 기간 | 계획 | 담당 |
-|---|---|---|
-| 5/11-5/17 | 결측치 처리, 스케일링, PCA 등 ML/DL 공통 전처리 파이프라인 구축 | 박재우, 염지훈 |
-| 5/18-5/31 | Logistic Regression, SVM, Random Forest, MLP 모델 병렬 개발 | 박재우, 염지훈, 오형우 |
-| 6/1-6/09 | GridSearchCV, SGD, Backpropagation 기반 모델 검증 및 튜닝 | 염지훈, 오형우 |
-| 6/10-6/30 | 통합 성능 비교, 오류 분석, 변수 중요도 해석, 최종 보고서 및 발표 자료 작성 | 전체 |
+| 기간 | 계획 |
+|---|---|
+| 5/11-5/17 | 결측치 처리, 스케일링, PCA 등 ML/DL 공통 전처리 파이프라인 구축 |
+| 5/18-5/31 | Logistic Regression, SVM, Random Forest, MLP 모델 개발 |
+| 6/1-6/09 | GridSearchCV, SGD, Backpropagation 기반 모델 검증 및 튜닝 |
+| 6/10-6/30 | 통합 성능 비교, 오류 분석, 변수 중요도 해석, 한국 자퇴 유추 해석, 최종 보고서 및 발표 자료 작성 |
 
 ## 실제 수행한 수정 활동 계획
 
@@ -158,13 +158,13 @@ def build_activity_appendix() -> Path:
 | 분석 | confusion matrix, feature importance, EDA 그래프, KMeans 비지도 분석 생성 | `reports/metrics`, `reports/figures` |
 | 최종 산출물 | 가이드라인 맞춤 보고서, appendix, 발표 자료 생성 | `reports/final_report_guideline_aligned.md`, `reports/presentation_slides.html` |
 
-## 팀원별 기여도
+## 수행 범위 (1인 프로젝트)
 
-| 팀원 | 기여 내용 |
+| 영역 | 수행 내용 |
 |---|---|
-| 박재우 | 프로젝트 일정 조율, 전처리 전략 수립, SMOTE 실험 설계, Random Forest 및 ensemble 모델링, 최종 비교 검토 |
-| 염지훈 | 표준화/PCA 실험, EDA 해석, Logistic Regression 및 SVM 튜닝, 결과표 정리 |
-| 오형우 | MLP 구조 설계, SGD/backpropagation 학습 구성, ML/DL 오류 비교, confusion matrix 분석 및 최종 검증 |
+| 데이터·전처리 | 전처리 전략 수립, 표준화/PCA 실험, SMOTE 실험 설계, EDA 해석 |
+| 모델링 | Logistic Regression·SVM·Random Forest 학습 및 튜닝, MLP 구조 설계와 SGD/backpropagation 학습 구성 |
+| 분석·해석 | ML/DL 오류 비교, confusion matrix 분석, feature importance 해석, 한국 고1 자퇴에 대한 유추적 해석, 최종 검증 |
 
 ## 재현성 체크리스트
 
@@ -203,13 +203,11 @@ def build_guideline_report(unsupervised_metrics: dict[str, float | int], figure_
 ## 프로젝트 개요
 
 - 과목: NOVA50101 Introduction to Artificial Intelligence for Industrial AI
-- 팀: Team 11
-- 팀원: 박재우, 염지훈, 오형우
-- 프로젝트 유형: Application project
-- 프로젝트 제목: 학업 성취도 및 중도 포기 예측을 위한 머신러닝과 딥러닝 모델의 비교 연구
-- 데이터셋: Predict Students' Dropout and Academic Success from Kaggle/UCI
+- 프로젝트 유형: 1인 개인 프로젝트 (Application project)
+- 프로젝트 제목: 해외 교육 데이터 기반 중도 이탈 예측과 한국 고1 자퇴 급증에 대한 유추적 해석
+- 데이터셋: Predict Students' Dropout and Academic Success (포르투갈 고등교육, Kaggle/UCI)
 
-본 프로젝트는 학생이 중도 포기할지, 계속 재학 중일지, 졸업할지를 예측하는 교육 AI 문제를 다룬다. 과제 가이드라인에 맞춰 전통적 머신러닝, 딥러닝, 전처리 실험, 오류 분석, 결과 해석을 함께 수행했다.
+본 프로젝트는 학생이 중도 포기할지, 계속 재학 중일지, 졸업할지를 예측하는 교육 AI 문제를 다룬다. 과제 가이드라인에 맞춰 전통적 머신러닝, 딥러닝, 전처리 실험, 오류 분석, 결과 해석을 함께 수행했다. 더불어 최근 연 1만 명을 넘어선 한국 고1 자퇴 급증 현상과 연결하되, 한국 데이터를 직접 구하기 어려워 해외(포르투갈 고등교육) 데이터의 이탈 구조를 학습한 뒤 한국 상황에 조심스럽게 유추한다. 한국 관련 서술은 모두 "예측"이 아닌 "유추적 해석"으로 제한하며, 한국형 전략적 자퇴(수능 집중을 위한 자발적 이탈)는 데이터가 학습한 실패형 이탈과 동기가 다를 수 있다는 점을 명시한다.
 
 ## Public Code Baseline 및 Originality
 
@@ -295,6 +293,10 @@ Random Forest 기준 상위 feature는 다음과 같다.
 
 가장 중요한 예측 변수는 학기별 이수/승인 과목 수와 성적이었다. 등록금 납부 여부도 중요한 변수로 나타났다. 이는 중도 포기와 졸업 여부가 입학 당시 정보뿐 아니라, 입학 후 학업 진행 상황과 강하게 연결되어 있음을 의미한다.
 
+### 한국 고1 자퇴에 대한 유추적 해석
+
+본 데이터가 가리키는 이탈 신호는 학업·재정 누적 실패(과목 이수 부진, 낮은 성적, 등록금 미납)에 가깝다. 반면 한국 고1의 전략적 자퇴는 오히려 성적이 양호한 학생이 더 나은 입시 전략(검정고시·수능 집중)을 위해 선택하는 경우가 많아, 동기 구조가 반대일 수 있다. 따라서 해외 데이터의 신호를 한국에 곧바로 적용하면 정반대 해석을 낳을 위험이 있다. 유추가 유효한 지점은 "재정·행정 상태와 초기 학업 성과가 지속 여부와 연결된다"는 일반 구조이며, 이는 경제적 사유나 학업 부적응으로 인한 비전략적 자퇴 이해에 참고가 된다. 이 간극을 명시적으로 드러내는 것이 본 프로젝트의 핵심 기여이며, 한국 관련 모든 해석은 정책 제언이 아닌 가설 수준으로 한정한다.
+
 ## 오류 분석
 
 confusion matrix를 보면 `Enrolled` class가 가장 분류하기 어려웠다. 이는 `Enrolled`가 중간 상태이기 때문이다. 현재 재학 중인 학생은 이후 졸업할 수도 있고 중도 포기할 수도 있으므로, `Dropout` 및 `Graduate`와 decision boundary가 겹칠 수 있다.
@@ -305,6 +307,7 @@ confusion matrix를 보면 `Enrolled` class가 가장 분류하기 어려웠다.
 - 일부 중요 feature는 학기별 성과 변수이므로, 입학 직후의 매우 이른 시점에는 사용할 수 없을 수 있다.
 - Kaggle public-code baseline은 reference로 사용했지만, 정적 notebook 페이지에서 정확한 metric을 동일하게 재현하지는 못했다.
 - 모델은 과거 tabular data에 기반하므로, 제도 변화나 개인적 상황을 모두 반영하지 못한다.
+- 데이터는 포르투갈 고등교육 맥락이므로, 한국 고1 자퇴에 대한 해석은 유추 수준이며 직접적인 예측·정책 근거로 사용할 수 없다. 특히 한국형 전략적 자퇴는 데이터가 학습한 실패형 이탈과 동기가 다를 수 있다.
 - 예측 결과는 학생 지원을 위한 decision-support 도구로 사용해야 하며, 학생에 대한 최종 판단이나 불이익 부여에 사용되어서는 안 된다.
 
 ## 향후 연구
@@ -320,7 +323,7 @@ confusion matrix를 보면 `Enrolled` class가 가장 분류하기 어려웠다.
 
 - Technical soundness: 공통 전처리 파이프라인, ML/DL 비교, tuning, ablation, EDA, 오류 분석 포함
 - Limitation and future work: 한계점과 구체적인 향후 실험 방향 제시
-- Activities: 기존/수정 활동 계획 및 팀원 기여도를 appendix로 제시
+- Activities: 기존/수정 활동 계획 및 수행 내역을 appendix로 제시
 
 ## 그림
 
